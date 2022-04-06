@@ -30,7 +30,7 @@ describe('geo-location', () => {
         city: 'LONDON',
         lat: 51.547133,
         lng: -0.005668,
-        serviceArea: 'LONDONEAST',
+        serviceArea: 'LONEAST',
       },
     });
   });
