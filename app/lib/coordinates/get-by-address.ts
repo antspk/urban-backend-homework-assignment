@@ -1,4 +1,5 @@
 import { AddressNotFoundError } from '../errors/address-not-found-error';
+import { AddressNotServicedError } from '../errors/address-not-serviced-error';
 import { IAddressWithServiceArea } from '../models/address';
 import { findServiceArea } from '../service-areas';
 import { geocode } from './providers/googlemaps-provider';
@@ -13,6 +14,11 @@ export async function getCoordinatesByAddress(
   }
 
   const serviceArea = findServiceArea(response.lat, response.lng);
+  
+  if (!serviceArea) {
+    throw new AddressNotServicedError(address);
+  }
+
   return {
     ...response,
     serviceArea,
