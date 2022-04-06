@@ -1,7 +1,4 @@
-abstract class ErrorBase extends Error {
-  public code: string;
-  public statusCode: number;
-}
+import { ErrorBase } from './error-base';
 
 export class AddressNotFoundError extends ErrorBase {
   constructor(address: string) {
