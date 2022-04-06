@@ -5,8 +5,14 @@ import { app } from '../../app';
 import * as GoogleMapsProvider from '../../app/lib/coordinates/providers/googlemaps-provider';
 
 describe('geo-location', () => {
+  const sandbox = sinon.createSandbox();
+  
+  beforeEach(() => {
+    sandbox.restore();
+  });
+  
   it('should return a valid service area', async () => {
-    sinon.stub(GoogleMapsProvider, 'geocode').resolves({
+    sandbox.stub(GoogleMapsProvider, 'geocode').resolves({
       lat: 51.547133,
       lng: -0.005668,
       address1: 'testing address1',
@@ -34,7 +40,7 @@ describe('geo-location', () => {
   });
 
   it('should throw an error, when service are is not found', async () => {
-    sinon.stub(GoogleMapsProvider, 'geocode').resolves(null);
+    sandbox.stub(GoogleMapsProvider, 'geocode').resolves(null);
 
     const { status, body } = await request(app)
       .get('/geolocation?address=testingaddress')
