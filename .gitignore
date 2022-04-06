@@ -107,3 +107,4 @@ dist
 **/*.js.map
 
 .DS_Store
+.idea
