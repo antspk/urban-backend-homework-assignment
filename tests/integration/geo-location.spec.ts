@@ -6,7 +6,7 @@ import * as GoogleMapsProvider from '../../app/lib/coordinates/providers/googlem
 import { IAddress } from '../../app/lib/models/address';
 import * as ServiceAreas from '../../app/lib/service-areas';
 
-describe('geo-location', () => {
+describe('controllers/geo-location', () => {
   const sandbox = sinon.createSandbox();
   
   const fakeAddress: IAddress = {
@@ -17,7 +17,7 @@ describe('geo-location', () => {
     city: 'LONDON',
   };
   
-  beforeEach(() => {
+  afterEach(async () => {
     sandbox.restore();
   });
   
