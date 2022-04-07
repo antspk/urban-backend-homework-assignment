@@ -40,7 +40,7 @@ describe('controllers/geo-location', () => {
       });
     });
     
-    it('should return ADDRESS_NOT_FOUND error, when add is not found', async () => {
+    it('should return address not found error, when add is not found', async () => {
       sinon.stub(GoogleMapsProvider, 'geocode').resolves(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
@@ -54,7 +54,7 @@ describe('controllers/geo-location', () => {
       });
     });
     
-    it('should return ADDRESS_NOT_SERVICED error, when address is outside service area', async () => {
+    it('should return address not serviced error, when address is outside service area', async () => {
       sinon.stub(GoogleMapsProvider, 'geocode').resolves(fakeAddress);
       sinon.stub(ServiceAreas, 'findServiceArea').returns(null);
 
