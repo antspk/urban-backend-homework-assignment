@@ -44,15 +44,11 @@ const geojson: GeoJSON[] = [
 ];
 
 describe('lib/service-areas', () => {
-  const sandbox = sinon.createSandbox();
-  
-  afterEach(() => {
-    sandbox.restore();
-  });
+  afterEach(() => sinon.restore());
   
   describe('findServiceArea', () => {
     it('should return a service area name, when service area exists', () => {
-      sandbox.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
+      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
 
       const serviceAreaName = findServiceArea(51.547133, -0.005668);
 
@@ -60,7 +56,7 @@ describe('lib/service-areas', () => {
     });
 
     it(`should return null when, service area doesn't exist`, () => {
-      sandbox.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
+      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
 
       const serviceAreaName = findServiceArea(51.535534, -0.029012);
 

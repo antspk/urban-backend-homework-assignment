@@ -7,8 +7,6 @@ import { IAddress } from '../../app/lib/models/address';
 import * as ServiceAreas from '../../app/lib/service-areas';
 
 describe('controllers/geo-location', () => {
-  const sandbox = sinon.createSandbox();
-  
   const fakeAddress: IAddress = {
     lat: 51.547133,
     lng: -0.005668,
@@ -17,13 +15,11 @@ describe('controllers/geo-location', () => {
     city: 'LONDON',
   };
   
-  afterEach(async () => {
-    sandbox.restore();
-  });
+  afterEach(async () => sinon.restore());
   
   describe('/geolocation (GET)', () => {
     it('should return service area location, when address is within service area', async () => {
-      sandbox.stub(GoogleMapsProvider, 'geocode').resolves(fakeAddress);
+      sinon.stub(GoogleMapsProvider, 'geocode').resolves(fakeAddress);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
@@ -45,7 +41,7 @@ describe('controllers/geo-location', () => {
     });
     
     it('should return ADDRESS_NOT_FOUND error, when add is not found', async () => {
-      sandbox.stub(GoogleMapsProvider, 'geocode').resolves(null);
+      sinon.stub(GoogleMapsProvider, 'geocode').resolves(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
       
@@ -59,8 +55,8 @@ describe('controllers/geo-location', () => {
     });
     
     it('should return ADDRESS_NOT_SERVICED error, when address is outside service area', async () => {
-      sandbox.stub(GoogleMapsProvider, 'geocode').resolves(fakeAddress);
-      sandbox.stub(ServiceAreas, 'findServiceArea').returns(null);
+      sinon.stub(GoogleMapsProvider, 'geocode').resolves(fakeAddress);
+      sinon.stub(ServiceAreas, 'findServiceArea').returns(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
