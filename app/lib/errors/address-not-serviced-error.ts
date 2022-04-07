@@ -1,3 +1,4 @@
+import { constants } from 'http2';
 import { ErrorBase } from './error-base';
 
 export class AddressNotServicedError extends ErrorBase {
@@ -6,5 +7,5 @@ export class AddressNotServicedError extends ErrorBase {
   }
 
   code = 'ADDRESS_NOT_SERVICED';
-  statusCode = 400;
+  statusCode = constants.HTTP_STATUS_BAD_REQUEST;
 }

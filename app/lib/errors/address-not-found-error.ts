@@ -1,3 +1,4 @@
+import { constants } from 'http2';
 import { ErrorBase } from './error-base';
 
 export class AddressNotFoundError extends ErrorBase {
@@ -6,5 +7,5 @@ export class AddressNotFoundError extends ErrorBase {
   }
 
   code = 'ADDRESS_NOT_FOUND';
-  statusCode = 404;
+  statusCode = constants.HTTP_STATUS_NOT_FOUND;
 }
