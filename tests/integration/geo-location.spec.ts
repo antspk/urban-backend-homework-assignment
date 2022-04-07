@@ -3,76 +3,74 @@ import * as sinon from 'sinon';
 import * as request from 'supertest';
 import { app } from '../../app';
 import * as GoogleMapsProvider from '../../app/lib/coordinates/providers/googlemaps-provider';
+import { IAddress } from '../../app/lib/models/address';
 import * as ServiceAreas from '../../app/lib/service-areas';
 
 describe('geo-location', () => {
   const sandbox = sinon.createSandbox();
   
+  const fakeAddress: IAddress = {
+    lat: 51.547133,
+    lng: -0.005668,
+    address1: 'testing address1',
+    address2: 'testing address2',
+    city: 'LONDON',
+  };
+  
   beforeEach(() => {
     sandbox.restore();
   });
   
-  it('should return a valid service area', async () => {
-    sandbox.stub(GoogleMapsProvider, 'geocode').resolves({
-      lat: 51.547133,
-      lng: -0.005668,
-      address1: 'testing address1',
-      address2: 'testing address2',
-      city: 'LONDON',
+  describe('/geolocation (GET)', () => {
+    it('should return service area location, when address is within service area', async () => {
+      sandbox.stub(GoogleMapsProvider, 'geocode').resolves(fakeAddress);
+
+      const response = await request(app).get('/geolocation?address=testingaddress');
+
+      expect(response).to.deep.include({
+        status: 200,
+        body: {
+          location: {
+            lat: 51.547133,
+            lng: -0.005668,
+            address1: 'testing address1',
+            address2: 'testing address2',
+            city: 'LONDON',
+            serviceArea: 'LONEAST' 
+          },
+          search: 'testingaddress',
+          status: 'OK',
+        }
+      });
     });
     
-    const { status, body } = await request(app)
-      .get('/geolocation?address=testingaddress')
-      .send();
+    it('should return ADDRESS_NOT_FOUND error, when add is not found', async () => {
+      sandbox.stub(GoogleMapsProvider, 'geocode').resolves(null);
 
-    expect(status).to.eq(200);
-    expect(body).to.deep.eq({
-      search: 'testingaddress',
-      status: 'OK',
-      location: {
-        address1: 'testing address1',
-        address2: 'testing address2',
-        city: 'LONDON',
-        lat: 51.547133,
-        lng: -0.005668,
-        serviceArea: 'LONEAST',
-      },
-    });
-  });
-
-  it('should throw an error, when address is not found', async () => {
-    sandbox.stub(GoogleMapsProvider, 'geocode').resolves(null);
-
-    const { status, body } = await request(app)
-      .get('/geolocation?address=testingaddress')
-      .send();
-
-    expect(status).to.eq(404);
-    expect(body).to.deep.eq({
-      message: 'Address testingaddress not found',
-      status: 'ADDRESS_NOT_FOUND'
-    });
-  });
-
-  it('should throw an error, when address is outside service area', async () => {
-    sandbox.stub(GoogleMapsProvider, 'geocode').resolves({
-      lat: 51.547133,
-      lng: -0.005668,
-      address1: 'testing address1',
-      address2: 'testing address2',
-      city: 'LONDON',
+      const response = await request(app).get('/geolocation?address=testingaddress');
+      
+      expect(response).to.deep.include({
+        status: 404,
+        body: {
+          message: 'Address testingaddress not found',
+          status: 'ADDRESS_NOT_FOUND'
+        }
+      });
     });
     
-    sandbox.stub(ServiceAreas, 'findServiceArea').returns(null);
+    it('should return ADDRESS_NOT_SERVICED error, when address is outside service area', async () => {
+      sandbox.stub(GoogleMapsProvider, 'geocode').resolves(fakeAddress);
+      sandbox.stub(ServiceAreas, 'findServiceArea').returns(null);
 
-    const { status, body } = await request(app)
-      .get('/geolocation?address=testingaddress')
-      .send();
+      const response = await request(app).get('/geolocation?address=testingaddress');
 
-    expect(status).to.eq(400);
-    expect(body).to.deep.eq({
-      message: 'Address testingaddress is outside service area',
-      status: 'ADDRESS_NOT_SERVICED',
+      expect(response).to.deep.include({
+        status: 400,
+        body: {
+          message: 'Address testingaddress is outside service area',
+          status: 'ADDRESS_NOT_SERVICED',
+        }
+      });
     });
   });
 });
