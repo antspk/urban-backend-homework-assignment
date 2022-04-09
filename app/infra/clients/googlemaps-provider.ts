@@ -1,7 +1,7 @@
 import { AddressType, Client, GeocodeResult, GeocodingAddressComponentType } from '@googlemaps/google-maps-services-js';
 
 import { Config } from '../../config';
-import { Address } from '../../domain/models/address';
+import { Address } from '../../domain/models/address-lookup';
 import { ToggleableLocationProvider } from '../../domain/models/location-provider';
 
 export class GoogleMapsLocationProvider implements ToggleableLocationProvider {

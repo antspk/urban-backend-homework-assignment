@@ -1,4 +1,4 @@
-import { Address } from '../models/address';
+import { Address } from '../models/address-lookup';
 import { LocationProvider, ToggleableLocationProvider } from '../models/location-provider';
 
 export class SequentialProvider implements LocationProvider {

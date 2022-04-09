@@ -1,4 +1,4 @@
-import { Address } from './address';
+import { Address } from './address-lookup';
 
 export interface LocationProvider {
   getLocation(address: string): Promise<Address | null>;

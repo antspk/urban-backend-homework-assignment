@@ -1,7 +1,7 @@
 import { Geocoder, geocoder } from 'geocoder-opencagedata';
 
 import { Config } from '../../config';
-import { Address } from '../../domain/models/address';
+import { Address } from '../../domain/models/address-lookup';
 import { ToggleableLocationProvider } from '../../domain/models/location-provider';
 
 export class OpenCageLocationProvider implements ToggleableLocationProvider {

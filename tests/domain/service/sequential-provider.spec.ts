@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Address } from '../../../app/domain/models/address';
+import { Address } from '../../../app/domain/models/address-lookup';
 import { ToggleableLocationProvider } from '../../../app/domain/models/location-provider';
 import { SequentialProvider } from '../../../app/domain/services/sequential-provider';
 

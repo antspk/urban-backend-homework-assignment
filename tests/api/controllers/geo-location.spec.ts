@@ -3,10 +3,10 @@ import * as sinon from 'sinon';
 import * as request from 'supertest';
 
 import { app } from '../../../app/app';
-import { Address } from '../../../app/domain/models/address';
+import { Address } from '../../../app/domain/models/address-lookup';
 import { GoogleMapsLocationProvider } from '../../../app/infra/clients/googlemaps-provider';
 import { OpenCageLocationProvider } from '../../../app/infra/clients/opencage-provider';
-import * as ServiceAreas from '../../../app/infra/orm/service-areas-provider';
+import { GeoJsonServiceAreaLookup } from '../../../app/infra/persistence/service-areas-lookup';
 
 describe('api/controllers/geo-location', () => {
   const fakeAddress: Address = {
@@ -63,7 +63,7 @@ describe('api/controllers/geo-location', () => {
     it('should return address not serviced error, when address is outside services area', async () => {
       sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
       sinon.stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
-      sinon.stub(ServiceAreas, 'findServiceArea').returns(null);
+      sinon.stub(GeoJsonServiceAreaLookup.prototype, 'lookup').returns(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
