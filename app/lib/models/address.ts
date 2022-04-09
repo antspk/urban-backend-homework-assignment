@@ -13,3 +13,7 @@ export interface IAddressWithServiceArea extends IAddress {
 export interface LocationProvider {
   getLocation(address: string): Promise<IAddress | null>
 }
+
+export interface ToggleableLocationProvider extends LocationProvider {
+  isEnabled(): boolean;
+}
