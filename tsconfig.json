@@ -3,10 +3,12 @@
     "target": "es6",
     "module": "commonjs",
     "sourceMap": true,
+    "baseUrl": "./",
+    "outDir": "./dist",
     "moduleResolution": "node"
   },
   "compileOnSave": true,
-  "include": ["app/**/*.ts", "tests/**/*.ts"],
+  "include": ["app/**/*.ts"],
   "exclude": ["node_modules"],
   "formatCodeOptions": {
     "indentSize": 2,
