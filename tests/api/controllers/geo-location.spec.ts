@@ -89,5 +89,28 @@ describe('api/controllers/geo-location', () => {
         },
       });
     });
+
+    it('should return validation error, when address is not provided', async () => {
+      const response = await request(app).get('/geolocation?address=');
+
+      expect(response).to.deep.include({
+        status: 400,
+        body: {
+          status: 'VALIDATION_ERROR',
+          message: 'Bad Request',
+          errors: [
+            {
+              instancePath: '/address',
+              keyword: 'minLength',
+              message: 'must NOT have fewer than 1 characters',
+              params: {
+                limit: 1,
+              },
+              schemaPath: '#/properties/address/minLength',
+            },
+          ],
+        },
+      });
+    });
   });
 });

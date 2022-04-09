@@ -1,5 +1,5 @@
 import { AddressWithServiceArea } from '../../domain/models/address-lookup';
-import { GeoLocationQuery } from '../validator/geo-location';
+import { GeoLocationQuery } from '../validators/geo-location';
 
 export class GeoLocationResource {
   readonly status = 'OK';

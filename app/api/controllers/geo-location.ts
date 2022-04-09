@@ -3,7 +3,7 @@ import { constants } from 'http2';
 
 import { AddressLookup } from '../../domain/models/address-lookup';
 import { GeoLocationResource } from '../resource/geo-location';
-import { GeoLocationQuery } from '../validator/geo-location';
+import { GeoLocationQuery } from '../validators/geo-location';
 
 export class GeoLocationController {
   constructor(private addressLookup: AddressLookup) {}
