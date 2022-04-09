@@ -1,4 +1,4 @@
-import { ErrorObject } from 'ajv';
+import { ErrorObject, JSONSchemaType } from 'ajv';
 
 import { BaseError } from '../../domain/errors/base-error';
 import { ValidationError } from '../errors/validation-error';
@@ -11,15 +11,12 @@ export class ErrorResource {
 
   readonly message: string;
 
-  readonly errors?: ErrorObject[];
-
-  readonly stack?: string[];
-
   constructor(status: string, message: string, errors?: ErrorObject[], stack?: string[]) {
     this.status = status;
     this.message = message;
-    this.errors = errors;
-    this.stack = stack;
+
+    (this as { errors?: ErrorObject[] }).errors = errors;
+    (this as { stack?: string[] }).stack = stack;
   }
 
   static from(error: Error, debug: boolean): ErrorResource {
@@ -38,4 +35,15 @@ export class ErrorResource {
 
     return new ErrorResource(status, message, errors, stack);
   }
+
+  static SCHEMA: JSONSchemaType<Required<ErrorResource>> = {
+    description: 'Unsuccessful response',
+    type: 'object',
+    properties: {
+      status: { type: 'string' },
+      message: { type: 'string' },
+    },
+    required: ['status', 'message'],
+    additionalProperties: false,
+  };
 }
