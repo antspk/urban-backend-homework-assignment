@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { constants } from 'http2';
 
+import { config } from '../../config';
 import { BaseError } from '../../domain/errors/base-error';
 import { ValidationError } from './validation-error';
 
@@ -14,6 +15,7 @@ export function errorHandler(error: Error, request: Request, response: Response,
   const message = status !== SERVER_ERROR_CODE ? error.message : SERVER_ERROR_MESSAGE;
 
   const errors = error instanceof ValidationError ? error.errors : undefined;
+  const stack = config.app.debug ? error.stack?.split('\n') : undefined;
 
-  response.status(httpStatus).json({ status, message, errors });
+  response.status(httpStatus).json({ status, message, errors, stack });
 }
