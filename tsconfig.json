@@ -7,6 +7,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitOverride": true,
+    "resolveJsonModule": true,
     "target": "es2019",
     "sourceMap": true,
     "outDir": "./dist",
