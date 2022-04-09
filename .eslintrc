@@ -1,0 +1,52 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint/eslint-plugin", "simple-import-sort"],
+  "extends": [
+    "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:eslint-comments/recommended",
+    "plugin:promise/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "root": true,
+  "env": {
+    "node": true,
+  },
+  "ignorePatterns": ["node_modules", "dist", "*.config.ts"],
+  "rules": {
+    "no-console": "error",
+    "class-methods-use-this": "off",
+    "import/no-default-export": "error",
+    "import/prefer-default-export": "off",
+    "simple-import-sort/imports": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "args": "none"
+      }
+    ],
+    "@typescript-eslint/return-await": [
+      "error",
+      "always"
+    ],
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowExpressions": true,
+        "allowTypedFunctionExpressions": true
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+  }
+}

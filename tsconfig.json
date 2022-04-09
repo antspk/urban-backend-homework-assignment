@@ -1,15 +1,30 @@
 {
   "compilerOptions": {
-    "target": "es6",
     "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitOverride": true,
+    "target": "es2019",
     "sourceMap": true,
-    "baseUrl": "./",
     "outDir": "./dist",
-    "moduleResolution": "node"
+    "baseUrl": "./",
+    "incremental": true,
+    "esModuleInterop": false,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
-  "compileOnSave": true,
-  "include": ["app/**/*.ts"],
+  "include": ["app/**/*"],
   "exclude": ["node_modules"],
+  "compileOnSave": true,
   "formatCodeOptions": {
     "indentSize": 2,
     "tabSize": 2,
