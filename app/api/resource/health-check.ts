@@ -1,7 +1,7 @@
 import { JSONSchemaType } from 'ajv';
 
 export class HealthCheckResource {
-  readonly status = 'UP';
+  readonly status: string = 'UP';
 
   static from(): HealthCheckResource {
     return new HealthCheckResource();

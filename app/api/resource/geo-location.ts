@@ -5,14 +5,13 @@ import { GeoLocationQuery } from '../validators/geo-location';
 import { LocationResource } from './location';
 
 export class GeoLocationResource {
-  readonly status: string;
+  readonly status: string = 'OK';
 
   readonly search: string;
 
   readonly location: Required<LocationResource>;
 
   constructor(search: string, location: Required<LocationResource>) {
-    this.status = 'UP';
     this.search = search;
     this.location = location;
   }
@@ -20,7 +19,7 @@ export class GeoLocationResource {
   static SCHEMA: JSONSchemaType<GeoLocationResource> = {
     type: 'object',
     properties: {
-      status: { type: 'string', default: 'UP' },
+      status: { type: 'string', default: 'OK' },
       search: { type: 'string' },
       location: LocationResource.SCHEMA,
     },
