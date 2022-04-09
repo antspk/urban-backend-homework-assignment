@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { GeoJSON } from 'geojson';
 import * as sinon from 'sinon';
+
 import { findServiceArea } from '../../app/lib/service-areas';
 import * as orm from '../../app/orm/service-areas';
 
@@ -78,19 +79,18 @@ const geojson: GeoJSON[] = [
               [-0.10884404182434082, 50.50659222851966],
             ],
           ],
-        }
-      ]
+        },
+      ],
     },
   },
-  
 ];
 
 describe('lib/service-areas', () => {
   afterEach(() => sinon.restore());
-  
+
   describe('findServiceArea', () => {
     it('should return a service area name, when service area exists', () => {
-      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
+      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as GeoJSON);
 
       const serviceAreaName = findServiceArea(51.547133, -0.005668);
 
@@ -98,19 +98,19 @@ describe('lib/service-areas', () => {
     });
 
     it(`should return null when, service area doesn't exist`, () => {
-      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
+      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as GeoJSON);
 
       const serviceAreaName = findServiceArea(51.535534, -0.029012);
 
-      expect(serviceAreaName).to.be.null;
+      expect(serviceAreaName).to.eq(null);
     });
 
     it('should return a service area name, when service area exists in geometry collection', () => {
-      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
+      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as GeoJSON);
 
       const serviceAreaName = findServiceArea(50.535534, -0.029012);
 
-      expect(serviceAreaName).to.be.null;
+      expect(serviceAreaName).to.eq(null);
     });
   });
 });

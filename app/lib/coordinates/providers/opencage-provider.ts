@@ -1,17 +1,18 @@
+import { Geocoder, geocoder } from 'geocoder-opencagedata';
+
 import { Config } from '../../../config';
 import { IAddress, ToggleableLocationProvider } from '../../models/address';
-import { geocoder, Geocoder } from 'geocoder-opencagedata';
 
 export class OpenCageLocationProvider implements ToggleableLocationProvider {
-  constructor(private options: { client: Geocoder, enabled: boolean }) {}
-  
-  async getLocation(address: string): Promise<IAddress> {
+  constructor(private options: { client: Geocoder; enabled: boolean }) {}
+
+  async getLocation(address: string): Promise<IAddress | null> {
     const response = await this.options.client.geocode({ q: address });
 
-    if (!response.ok || response.results.length === 0) {
+    if (!response.ok || !response.results || response.results.length === 0) {
       return null;
     }
-    
+
     return {
       address1: response.results[0].formatted,
       address2: response.results[0].components.state_district,
@@ -25,7 +26,7 @@ export class OpenCageLocationProvider implements ToggleableLocationProvider {
   isEnabled(): boolean {
     return this.options.enabled;
   }
-  
+
   static factory(config: Config): OpenCageLocationProvider {
     return new OpenCageLocationProvider({
       client: new geocoder({ api_key: config.openCageProvider.apiKey }),
