@@ -6,7 +6,7 @@ import { OpenCageLocationProvider } from '../../../app/infra/clients/opencage-pr
 
 describe('infra/clients/opencage-provider', () => {
   const client = new geocoder({});
-  const provider = new OpenCageLocationProvider({ client, enabled: true });
+  const provider = new OpenCageLocationProvider({ client, enabled: true, order: 1 });
 
   const response = {
     ok: true,

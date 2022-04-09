@@ -1,12 +1,17 @@
 import { expect } from 'chai';
 
 import { Address } from '../../../app/domain/models/address-lookup';
-import { ToggleableLocationProvider } from '../../../app/domain/models/location-provider';
+import { ConfigurableLocationProvider } from '../../../app/domain/models/location-provider';
 import { SequentialProvider } from '../../../app/domain/services/sequential-provider';
 
 describe('domain/services/sequential-provider', () => {
-  class FakeProvider implements ToggleableLocationProvider {
-    constructor(private delay: number, private enabled: boolean, private address: Address | null) {}
+  class FakeProvider implements ConfigurableLocationProvider {
+    constructor(
+      private delay: number,
+      private enabled: boolean,
+      private address: Address | null,
+      private order: number,
+    ) {}
 
     async getLocation(address: string): Promise<Address | null> {
       return await new Promise<Address | null>((resolve) => {
@@ -16,6 +21,10 @@ describe('domain/services/sequential-provider', () => {
 
     isEnabled(): boolean {
       return this.enabled;
+    }
+
+    getSortOrder(): number {
+      return this.order;
     }
   }
 
@@ -31,8 +40,8 @@ describe('domain/services/sequential-provider', () => {
   describe('SequentialProvider', () => {
     it('should return first location that is resolved', async () => {
       const provider = new SequentialProvider([
-        new FakeProvider(1, false, null),
-        new FakeProvider(1, true, fakeAddress),
+        new FakeProvider(1, false, null, 1),
+        new FakeProvider(1, true, fakeAddress, 2),
       ]);
 
       const location = await provider.getLocation('searchaddress');
@@ -41,7 +50,7 @@ describe('domain/services/sequential-provider', () => {
     });
 
     it('should return null, when location can not be resolved', async () => {
-      const provider = new SequentialProvider([new FakeProvider(1, true, null), new FakeProvider(1, true, null)]);
+      const provider = new SequentialProvider([new FakeProvider(1, true, null, 1), new FakeProvider(1, true, null, 2)]);
 
       const location = await provider.getLocation('searchaddress');
 

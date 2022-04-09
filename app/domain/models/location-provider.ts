@@ -4,6 +4,8 @@ export interface LocationProvider {
   getLocation(address: string): Promise<Address | null>;
 }
 
-export interface ToggleableLocationProvider extends LocationProvider {
+export interface ConfigurableLocationProvider extends LocationProvider {
   isEnabled(): boolean;
+
+  getSortOrder(): number;
 }

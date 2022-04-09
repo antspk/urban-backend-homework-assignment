@@ -1,11 +1,15 @@
 import { Address } from '../models/address-lookup';
-import { LocationProvider, ToggleableLocationProvider } from '../models/location-provider';
+import { ConfigurableLocationProvider, LocationProvider } from '../models/location-provider';
 
 export class SequentialProvider implements LocationProvider {
-  constructor(private providers: ToggleableLocationProvider[]) {}
+  constructor(private providers: ConfigurableLocationProvider[]) {}
 
   async getLocation(address: string): Promise<Address | null> {
-    for await (const provider of this.providers) {
+    const providers = this.providers.sort((a, b) => a.getSortOrder() - b.getSortOrder());
+
+    console.log(providers);
+
+    for await (const provider of providers) {
       if (provider.isEnabled()) {
         const location = await provider.getLocation(address);
         if (location) {
