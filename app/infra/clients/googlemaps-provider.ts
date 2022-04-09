@@ -1,12 +1,13 @@
 import { AddressType, Client, GeocodeResult, GeocodingAddressComponentType } from '@googlemaps/google-maps-services-js';
 
-import { Config } from '../../../config';
-import { IAddress, ToggleableLocationProvider } from '../../models/address';
+import { Config } from '../../config';
+import { Address } from '../../domain/models/address';
+import { ToggleableLocationProvider } from '../../domain/models/location-provider';
 
 export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
   constructor(private options: { client: Client; enabled: boolean; apiKey: string }) {}
 
-  async getLocation(address: string): Promise<IAddress | null> {
+  async getLocation(address: string): Promise<Address | null> {
     const googleAddress = await this.options.client.geocode({
       params: {
         address,
@@ -21,7 +22,7 @@ export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
     return this.mapAddress(googleAddress.data.results[0]);
   }
 
-  private mapAddress(address: GeocodeResult): IAddress {
+  private mapAddress(address: GeocodeResult): Address {
     const { address_components: components, geometry } = address;
 
     return {

@@ -9,7 +9,7 @@ import {
   point as createPoint,
 } from '@turf/turf';
 
-import { getGeoJson } from '../orm/service-areas';
+import { getGeoJson } from './service-areas';
 
 function isCollection(geometry: Geometry | GeometryCollection): geometry is GeometryCollection {
   return (geometry as GeometryCollection).geometries !== undefined;

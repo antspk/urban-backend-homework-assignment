@@ -1,14 +1,15 @@
 import { expect } from 'chai';
 
-import { SequentialProvider } from '../../app/lib/coordinates/providers/sequential-provider';
-import { IAddress, ToggleableLocationProvider } from '../../app/lib/models/address';
+import { Address } from '../../../app/domain/models/address';
+import { ToggleableLocationProvider } from '../../../app/domain/models/location-provider';
+import { SequentialProvider } from '../../../app/domain/services/sequential-provider';
 
-describe('lib/coordinates/providers/sequential-provider', () => {
+describe('domain/services/sequential-provider', () => {
   class FakeProvider implements ToggleableLocationProvider {
-    constructor(private delay: number, private enabled: boolean, private address: IAddress | null) {}
+    constructor(private delay: number, private enabled: boolean, private address: Address | null) {}
 
-    async getLocation(address: string): Promise<IAddress | null> {
-      return await new Promise<IAddress | null>((resolve) => {
+    async getLocation(address: string): Promise<Address | null> {
+      return await new Promise<Address | null>((resolve) => {
         setTimeout(() => resolve(this.address), this.delay);
       });
     }
@@ -18,7 +19,7 @@ describe('lib/coordinates/providers/sequential-provider', () => {
     }
   }
 
-  const fakeAddress: IAddress = {
+  const fakeAddress: Address = {
     lat: 51.547133,
     lng: -0.005668,
     address1: 'testing address1',

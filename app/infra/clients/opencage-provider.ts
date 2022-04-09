@@ -1,12 +1,13 @@
 import { Geocoder, geocoder } from 'geocoder-opencagedata';
 
-import { Config } from '../../../config';
-import { IAddress, ToggleableLocationProvider } from '../../models/address';
+import { Config } from '../../config';
+import { Address } from '../../domain/models/address';
+import { ToggleableLocationProvider } from '../../domain/models/location-provider';
 
 export class OpenCageLocationProvider implements ToggleableLocationProvider {
   constructor(private options: { client: Geocoder; enabled: boolean }) {}
 
-  async getLocation(address: string): Promise<IAddress | null> {
+  async getLocation(address: string): Promise<Address | null> {
     const response = await this.options.client.geocode({ q: address });
 
     if (!response.ok || !response.results || response.results.length === 0) {

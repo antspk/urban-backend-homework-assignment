@@ -1,8 +1,8 @@
 import { constants } from 'http2';
 
-import { ErrorBase } from './error-base';
+import { BaseError } from './base-error';
 
-export class AddressNotFoundError extends ErrorBase {
+export class AddressNotFoundError extends BaseError {
   constructor(address: string) {
     super(`Address ${address} not found`);
   }

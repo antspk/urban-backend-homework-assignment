@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import { GeoJSON } from 'geojson';
 import * as sinon from 'sinon';
 
-import { findServiceArea } from '../../app/lib/service-areas';
-import * as orm from '../../app/orm/service-areas';
+import * as orm from '../../../app/infra/orm/service-areas';
+import { findServiceArea } from '../../../app/infra/orm/service-areas-provider';
 
 const geojson: GeoJSON[] = [
   {
@@ -85,11 +85,11 @@ const geojson: GeoJSON[] = [
   },
 ];
 
-describe('lib/service-areas', () => {
+describe('lib/services-areas', () => {
   afterEach(() => sinon.restore());
 
   describe('findServiceArea', () => {
-    it('should return a service area name, when service area exists', () => {
+    it('should return a services area name, when services area exists', () => {
       sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as GeoJSON);
 
       const serviceAreaName = findServiceArea(51.547133, -0.005668);
@@ -105,7 +105,7 @@ describe('lib/service-areas', () => {
       expect(serviceAreaName).to.eq(null);
     });
 
-    it('should return a service area name, when service area exists in geometry collection', () => {
+    it('should return a services area name, when services area exists in geometry collection', () => {
       sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as GeoJSON);
 
       const serviceAreaName = findServiceArea(50.535534, -0.029012);

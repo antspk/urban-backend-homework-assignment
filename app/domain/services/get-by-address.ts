@@ -1,18 +1,18 @@
 import { config } from '../../config';
+import { GoogleMapsLocationProvider } from '../../infra/clients/googlemaps-provider';
+import { OpenCageLocationProvider } from '../../infra/clients/opencage-provider';
+import { findServiceArea } from '../../infra/orm/service-areas-provider';
 import { AddressNotFoundError } from '../errors/address-not-found-error';
 import { AddressNotServicedError } from '../errors/address-not-serviced-error';
-import { IAddressWithServiceArea } from '../models/address';
-import { findServiceArea } from '../service-areas';
-import { GoogleMapsLocationProvider } from './providers/googlemaps-provider';
-import { OpenCageLocationProvider } from './providers/opencage-provider';
-import { SequentialProvider } from './providers/sequential-provider';
+import { AddressWithServiceArea } from '../models/address';
+import { SequentialProvider } from './sequential-provider';
 
 const locationProvider = new SequentialProvider([
   OpenCageLocationProvider.factory(config),
   GoogleMapsLocationProvider.create(config),
 ]);
 
-export async function getCoordinatesByAddress(address: string): Promise<IAddressWithServiceArea> {
+export async function getCoordinatesByAddress(address: string): Promise<AddressWithServiceArea> {
   const response = await locationProvider.getLocation(address);
 
   if (!response) {

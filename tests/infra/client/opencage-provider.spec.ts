@@ -2,9 +2,9 @@ import { expect } from 'chai';
 import { geocoder } from 'geocoder-opencagedata';
 import * as sinon from 'sinon';
 
-import { OpenCageLocationProvider } from '../../app/lib/coordinates/providers/opencage-provider';
+import { OpenCageLocationProvider } from '../../../app/infra/clients/opencage-provider';
 
-describe('lib/coordinates/providers/opencage-provider', () => {
+describe('infra/clients/opencage-provider', () => {
   const client = new geocoder({});
   const provider = new OpenCageLocationProvider({ client, enabled: true });
 

@@ -2,14 +2,14 @@ import { expect } from 'chai';
 import * as sinon from 'sinon';
 import * as request from 'supertest';
 
-import { app } from '../../app/app';
-import { GoogleMapsLocationProvider } from '../../app/lib/coordinates/providers/googlemaps-provider';
-import { OpenCageLocationProvider } from '../../app/lib/coordinates/providers/opencage-provider';
-import { IAddress } from '../../app/lib/models/address';
-import * as ServiceAreas from '../../app/lib/service-areas';
+import { app } from '../../../app/app';
+import { Address } from '../../../app/domain/models/address';
+import { GoogleMapsLocationProvider } from '../../../app/infra/clients/googlemaps-provider';
+import { OpenCageLocationProvider } from '../../../app/infra/clients/opencage-provider';
+import * as ServiceAreas from '../../../app/infra/orm/service-areas-provider';
 
-describe('controllers/geo-location', () => {
-  const fakeAddress: IAddress = {
+describe('api/controllers/geo-location', () => {
+  const fakeAddress: Address = {
     lat: 51.547133,
     lng: -0.005668,
     address1: 'testing address1',
@@ -21,7 +21,7 @@ describe('controllers/geo-location', () => {
   afterEach(async () => sinon.restore());
 
   describe('/geolocation (GET)', () => {
-    it('should return service area location, when address is within service area', async () => {
+    it('should return services area location, when address is within services area', async () => {
       sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
       sinon.stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
 
@@ -60,7 +60,7 @@ describe('controllers/geo-location', () => {
       });
     });
 
-    it('should return address not serviced error, when address is outside service area', async () => {
+    it('should return address not serviced error, when address is outside services area', async () => {
       sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
       sinon.stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
       sinon.stub(ServiceAreas, 'findServiceArea').returns(null);

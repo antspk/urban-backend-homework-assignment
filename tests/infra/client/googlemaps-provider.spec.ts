@@ -3,9 +3,9 @@ import { GeocodeResponse } from '@googlemaps/google-maps-services-js/dist/geocod
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import { GoogleMapsLocationProvider } from '../../app/lib/coordinates/providers/googlemaps-provider';
+import { GoogleMapsLocationProvider } from '../../../app/infra/clients/googlemaps-provider';
 
-describe('lib/coordinates/providers/googlemaps-provider', () => {
+describe('infra/clients/googlemaps-provider', () => {
   const client = new Client({});
   const provider = new GoogleMapsLocationProvider({ client, enabled: true, apiKey: '' });
   const response = {

@@ -1,8 +1,8 @@
 import { constants } from 'http2';
 
-import { ErrorBase } from './error-base';
+import { BaseError } from './base-error';
 
-export class AddressNotServicedError extends ErrorBase {
+export class AddressNotServicedError extends BaseError {
   constructor(address: string) {
     super(`Address ${address} is outside service area`);
   }
