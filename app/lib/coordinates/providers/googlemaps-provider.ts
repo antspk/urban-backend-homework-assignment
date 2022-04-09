@@ -39,6 +39,7 @@ export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
       city: address_components.find((x) => x.types.includes(GeocodingAddressComponentType.postal_town))?.long_name,
       lat: geometry.location.lat,
       lng: geometry.location.lng,
+      postcode: address_components.find((x) => x.types.includes(AddressType.postal_code))?.long_name,
     };
   }
 

@@ -14,6 +14,7 @@ describe('controllers/geo-location', () => {
     address1: 'testing address1',
     address2: 'testing address2',
     city: 'LONDON',
+    postcode: 'EXAMPLE',
   };
   
   afterEach(async () => sinon.restore());
@@ -34,7 +35,8 @@ describe('controllers/geo-location', () => {
             address1: 'testing address1',
             address2: 'testing address2',
             city: 'LONDON',
-            serviceArea: 'LONEAST' 
+            postcode: 'EXAMPLE',
+            serviceArea: 'LONEAST'
           },
           search: 'testingaddress',
           status: 'OK',

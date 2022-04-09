@@ -24,6 +24,7 @@ describe('lib/coordinates/providers/sequential-provider', () => {
     address1: 'testing address1',
     address2: 'testing address2',
     city: 'LONDON',
+    postcode: 'EXAMPLE',
   };
   
   describe('SequentialProvider', () => {
