@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import * as request from 'supertest';
-import { app } from '../../app';
+import { app } from '../../app/app';
 import { OpenCageLocationProvider } from '../../app/lib/coordinates/providers/opencage-provider';
 import { GoogleMapsLocationProvider } from '../../app/lib/coordinates/providers/googlemaps-provider';
 import { IAddress } from '../../app/lib/models/address';
