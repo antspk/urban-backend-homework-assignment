@@ -1,0 +1,6 @@
+{
+  "extension": [".ts"],
+  "exclude": ["**/*.d.ts", "tests/**", "/*.js"],
+  "require": ["ts-node/register"],
+  "reporter": ["html", "text"]
+}
