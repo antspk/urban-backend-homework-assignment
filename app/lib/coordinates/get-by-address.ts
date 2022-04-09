@@ -2,12 +2,14 @@ import { AddressNotFoundError } from '../errors/address-not-found-error';
 import { AddressNotServicedError } from '../errors/address-not-serviced-error';
 import { IAddressWithServiceArea } from '../models/address';
 import { findServiceArea } from '../service-areas';
-import { geocode } from './providers/googlemaps-provider';
+import { OpenCageLocationProvider } from './providers/opencage-provider'
+
+const openCageLocationProvider = new OpenCageLocationProvider();
 
 export async function getCoordinatesByAddress(
   address: string,
 ): Promise<IAddressWithServiceArea> {
-  const response = await geocode(address);
+  const response = await openCageLocationProvider.getLocation(address);
 
   if (!response) {
     throw new AddressNotFoundError(address);
