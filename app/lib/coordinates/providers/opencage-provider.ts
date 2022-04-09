@@ -13,13 +13,14 @@ export class OpenCageLocationProvider implements ToggleableLocationProvider {
     if (!information.ok || information.results.length === 0) {
       return null;
     }
-
+    
     return {
       address1: information.results[0].formatted,
       address2: information.results[0].components.state_district,
       city: information.results[0].components.city,
       lat: information.results[0].geometry.lat as number,
-      lng: information.results[0].geometry.lng as number
+      lng: information.results[0].geometry.lng as number,
+      postcode: information.results[0].components.postcode,
     };
   }
 

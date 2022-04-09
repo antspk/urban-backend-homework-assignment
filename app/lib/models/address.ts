@@ -4,6 +4,7 @@ export interface IAddress {
   city: string;
   lat: number;
   lng: number;
+  postcode: string;
 }
 
 export interface IAddressWithServiceArea extends IAddress {
