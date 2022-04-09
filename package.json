@@ -46,6 +46,7 @@
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.1.9",
     "@turf/turf": "^6.5.0",
+    "ajv": "^8.11.0",
     "body-parser": "^1.19.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { constants } from 'http2';
 
 import { BaseError } from '../../domain/errors/base-error';
+import { ValidationError } from './validation-error';
 
 const SERVER_ERROR_CODE = 'INTERNAL_SERVER_ERROR';
 const SERVER_ERROR_STATUS = constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
@@ -12,5 +13,7 @@ export function errorHandler(error: Error, request: Request, response: Response,
   const httpStatus = error instanceof BaseError ? error.statusCode : SERVER_ERROR_STATUS;
   const message = status !== SERVER_ERROR_CODE ? error.message : SERVER_ERROR_MESSAGE;
 
-  response.status(httpStatus).json({ status, message });
+  const errors = error instanceof ValidationError ? error.errors : undefined;
+
+  response.status(httpStatus).json({ status, message, errors });
 }
