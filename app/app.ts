@@ -1,14 +1,15 @@
 import { json } from 'body-parser';
 import * as express from 'express';
+import { callbackify } from 'util';
 
-import { config } from './config';
-import { controller as geolocationController } from './controllers/geo-location';
-import { errorHandler } from './lib/errors/express-error-handler';
+import { errorHandler } from './api/errors/express-error-handler';
+import { geoLocationController } from './container';
 
 const app = express();
 
 app.use(json());
-geolocationController(app);
+app.get('/geolocation', callbackify(geoLocationController.geoLocationHandler.bind(geoLocationController)));
+
 app.use(errorHandler);
 
-export { app, config };
+export { app };
