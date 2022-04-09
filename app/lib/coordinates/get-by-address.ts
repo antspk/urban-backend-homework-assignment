@@ -1,3 +1,4 @@
+import { config } from '../../config';
 import { AddressNotFoundError } from '../errors/address-not-found-error';
 import { AddressNotServicedError } from '../errors/address-not-serviced-error';
 import { IAddressWithServiceArea } from '../models/address';
@@ -7,8 +8,8 @@ import { GoogleMapsLocationProvider } from './providers/googlemaps-provider'
 import { SequentialProvider } from './providers/sequential-provider';
 
 const locationProvider = new SequentialProvider([
-  new OpenCageLocationProvider(),
-  new GoogleMapsLocationProvider(),
+  OpenCageLocationProvider.factory(config),
+  GoogleMapsLocationProvider.create(config),
 ]);
 
 export async function getCoordinatesByAddress(

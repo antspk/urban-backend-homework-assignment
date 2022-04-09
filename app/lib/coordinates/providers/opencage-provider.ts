@@ -1,42 +1,35 @@
+import { Config } from '../../../config';
 import { IAddress, ToggleableLocationProvider } from '../../models/address';
-import { geocoder, IGeoPoint } from 'geocoder-opencagedata';
-
-const OPEN_CAGE_KEY = process.env.OPEN_CAGE_KEY;
+import { geocoder, Geocoder } from 'geocoder-opencagedata';
 
 export class OpenCageLocationProvider implements ToggleableLocationProvider {
-  
-  private openCageClient = new geocoder({ api_key: OPEN_CAGE_KEY });
+  constructor(private options: { client: Geocoder, enabled: boolean }) {}
   
   async getLocation(address: string): Promise<IAddress> {
-    const information = await this.openCageClient.geocode({ q: address });
+    const response = await this.options.client.geocode({ q: address });
 
-    if (!information.ok || information.results.length === 0) {
+    if (!response.ok || response.results.length === 0) {
       return null;
     }
     
     return {
-      address1: information.results[0].formatted,
-      address2: information.results[0].components.state_district,
-      city: information.results[0].components.city,
-      lat: information.results[0].geometry.lat as number,
-      lng: information.results[0].geometry.lng as number,
-      postcode: information.results[0].components.postcode,
+      address1: response.results[0].formatted,
+      address2: response.results[0].components.state_district,
+      city: response.results[0].components.city,
+      lat: response.results[0].geometry.lat as number,
+      lng: response.results[0].geometry.lng as number,
+      postcode: response.results[0].components.postcode,
     };
   }
 
   isEnabled(): boolean {
-    return process.env.OPEN_CAGE_ENABLED === 'true';
+    return this.options.enabled;
   }
-}
-
-interface OpenCageResult {
-  annotations?: any;
-  bounds: {
-    northeast: IGeoPoint;
-    southwest: IGeoPoint;
-  };
-  components?: any;
-  confidence: number;
-  formatted: string;
-  geometry: IGeoPoint;
+  
+  static factory(config: Config): OpenCageLocationProvider {
+    return new OpenCageLocationProvider({
+      client: new geocoder({ api_key: config.openCageProvider.apiKey }),
+      enabled: config.openCageProvider.enabled,
+    });
+  }
 }
