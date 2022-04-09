@@ -74,5 +74,19 @@ describe('controllers/geo-location', () => {
         }
       });
     });
+
+    it('should return internal server error, when unhandled error occurs', async () => {
+      sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').rejects(new Error());
+      
+      const response = await request(app).get('/geolocation?address=testingaddress');
+
+      expect(response).to.deep.include({
+        status: 500,
+        body: {
+          message: 'An unexpected error occurred',
+          status: 'INTERNAL_SERVER_ERROR',
+        }
+      });
+    });
   });
 });
