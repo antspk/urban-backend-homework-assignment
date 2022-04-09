@@ -13,5 +13,5 @@ export const config = {
   openCageProvider: {
     enabled: process.env.OPEN_CAGE_ENABLED !== 'false',
     apiKey: process.env.OPEN_CAGE_KEY || 'unknown',
-  }
+  },
 };

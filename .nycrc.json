@@ -1,6 +1,6 @@
 {
   "extension": [".ts"],
   "exclude": ["**/*.d.ts", "tests/**", "app/*.ts"],
-  "require": ["ts-node/register"],
+  "require": ["ts-node/register", "tsconfig-paths/register", "source-map-support/register"],
   "reporter": ["html", "text"]
 }

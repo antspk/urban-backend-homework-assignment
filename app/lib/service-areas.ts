@@ -1,13 +1,31 @@
-import { getGeoJson } from '../orm/service-areas';
 import {
-  featureCollection,
-  point as createPoint,
-  FeatureCollection,
   booleanWithin,
+  Feature,
+  FeatureCollection,
+  featureCollection,
   Geometry,
-  GeometryCollection, Feature, Point,
+  GeometryCollection,
+  Point,
+  point as createPoint,
 } from '@turf/turf';
 
+import { getGeoJson } from '../orm/service-areas';
+
+function isCollection(geometry: Geometry | GeometryCollection): geometry is GeometryCollection {
+  return (geometry as GeometryCollection).geometries !== undefined;
+}
+
+function isInGeometry(point: Feature<Point>, geometry: Geometry | GeometryCollection): boolean {
+  if (isCollection(geometry)) {
+    return geometry.geometries.find((item) => booleanWithin(point, item)) !== undefined;
+  }
+
+  return booleanWithin(point, geometry);
+}
+
+function findFeatureByPoint(point: Feature<Point>, collection: FeatureCollection): Feature | undefined {
+  return collection.features.find((feature) => isInGeometry(point, feature.geometry));
+}
 
 export function findServiceArea(lat: number, lng: number): string | null {
   const geoJson = getGeoJson() as FeatureCollection;
@@ -17,20 +35,4 @@ export function findServiceArea(lat: number, lng: number): string | null {
   const feature = findFeatureByPoint(point, collection);
 
   return feature?.properties?.Name ?? null;
-}
-
-function isCollection(geometry: Geometry | GeometryCollection): geometry is GeometryCollection {
-  return (geometry as GeometryCollection).geometries !== undefined;
-}
-
-function isInGeometry(point: Feature<Point>, geometry: Geometry | GeometryCollection): boolean {
-  if (isCollection(geometry)) {
-    return geometry.geometries.find((geometry) => booleanWithin(point, geometry)) !== undefined;
-  }
-
-  return booleanWithin(point, geometry);
-}
-
-function findFeatureByPoint(point: Feature<Point>, collection: FeatureCollection): Feature | undefined {
-  return collection.features.find((feature) => isInGeometry(point, feature.geometry));
 }

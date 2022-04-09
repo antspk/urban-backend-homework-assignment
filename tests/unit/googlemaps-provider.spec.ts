@@ -1,11 +1,12 @@
 import { Client } from '@googlemaps/google-maps-services-js';
 import { GeocodeResponse } from '@googlemaps/google-maps-services-js/dist/geocode/geocode';
 import { expect } from 'chai';
-import { GoogleMapsLocationProvider } from '../../app/lib/coordinates/providers/googlemaps-provider';
 import * as sinon from 'sinon';
 
+import { GoogleMapsLocationProvider } from '../../app/lib/coordinates/providers/googlemaps-provider';
+
 describe('lib/coordinates/providers/googlemaps-provider', () => {
-  const client = new Client({})
+  const client = new Client({});
   const provider = new GoogleMapsLocationProvider({ client, enabled: true, apiKey: '' });
   const response = {
     data: {
@@ -16,21 +17,21 @@ describe('lib/coordinates/providers/googlemaps-provider', () => {
             { long_name: 'testing address1', short_name: 'testing address1', types: ['route'] },
             { long_name: 'testing address2', short_name: 'testing address2', types: ['neighborhood'] },
             { long_name: 'LONDON', short_name: 'LONDON', types: ['postal_town'] },
-            { long_name: 'EXAMPLE', short_name: 'EXAMPLE', types: ['postal_code'] }
+            { long_name: 'EXAMPLE', short_name: 'EXAMPLE', types: ['postal_code'] },
           ],
         },
       ],
     },
   };
-  
+
   afterEach(() => sinon.restore());
-  
+
   describe('getLocation', () => {
     it('should return resolved address location, when request is successful', async () => {
       sinon.stub(client, 'geocode').resolves(response as unknown as GeocodeResponse);
-      
+
       const result = await provider.getLocation('search address');
-      
+
       expect(result).to.deep.eq({
         address1: 'testing address1',
         address2: 'testing address2',
@@ -50,7 +51,7 @@ describe('lib/coordinates/providers/googlemaps-provider', () => {
     });
 
     it('should return resolved with missing data, when request is successful, but lacks information', async () => {
-      const noComponentsResponse = { data: { results: [{ ...response.data.results[0], address_components: [] }]} };
+      const noComponentsResponse = { data: { results: [{ ...response.data.results[0], address_components: [] }] } };
       sinon.stub(client, 'geocode').resolves(noComponentsResponse as unknown as GeocodeResponse);
 
       const result = await provider.getLocation('search address');

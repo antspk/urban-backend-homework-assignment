@@ -1,4 +1,5 @@
 import { constants } from 'http2';
+
 import { ErrorBase } from './error-base';
 
 export class AddressNotServicedError extends ErrorBase {
@@ -6,6 +7,7 @@ export class AddressNotServicedError extends ErrorBase {
     super(`Address ${address} is outside service area`);
   }
 
-  code = 'ADDRESS_NOT_SERVICED';
-  statusCode = constants.HTTP_STATUS_BAD_REQUEST;
+  override code = 'ADDRESS_NOT_SERVICED';
+
+  override statusCode = constants.HTTP_STATUS_BAD_REQUEST;
 }

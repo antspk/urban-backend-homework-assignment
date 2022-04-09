@@ -3,8 +3,8 @@ import { AddressNotFoundError } from '../errors/address-not-found-error';
 import { AddressNotServicedError } from '../errors/address-not-serviced-error';
 import { IAddressWithServiceArea } from '../models/address';
 import { findServiceArea } from '../service-areas';
-import { OpenCageLocationProvider } from './providers/opencage-provider'
-import { GoogleMapsLocationProvider } from './providers/googlemaps-provider'
+import { GoogleMapsLocationProvider } from './providers/googlemaps-provider';
+import { OpenCageLocationProvider } from './providers/opencage-provider';
 import { SequentialProvider } from './providers/sequential-provider';
 
 const locationProvider = new SequentialProvider([
@@ -12,9 +12,7 @@ const locationProvider = new SequentialProvider([
   GoogleMapsLocationProvider.create(config),
 ]);
 
-export async function getCoordinatesByAddress(
-  address: string,
-): Promise<IAddressWithServiceArea> {
+export async function getCoordinatesByAddress(address: string): Promise<IAddressWithServiceArea> {
   const response = await locationProvider.getLocation(address);
 
   if (!response) {
@@ -22,7 +20,7 @@ export async function getCoordinatesByAddress(
   }
 
   const serviceArea = findServiceArea(response.lat, response.lng);
-  
+
   if (!serviceArea) {
     throw new AddressNotServicedError(address);
   }

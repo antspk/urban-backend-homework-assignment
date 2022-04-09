@@ -1,4 +1,5 @@
 import { constants } from 'http2';
+
 import { ErrorBase } from './error-base';
 
 export class AddressNotFoundError extends ErrorBase {
@@ -6,6 +7,7 @@ export class AddressNotFoundError extends ErrorBase {
     super(`Address ${address} not found`);
   }
 
-  code = 'ADDRESS_NOT_FOUND';
-  statusCode = constants.HTTP_STATUS_NOT_FOUND;
+  override code = 'ADDRESS_NOT_FOUND';
+
+  override statusCode = constants.HTTP_STATUS_NOT_FOUND;
 }

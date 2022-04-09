@@ -1,17 +1,18 @@
 import { expect } from 'chai';
 import { geocoder } from 'geocoder-opencagedata';
 import * as sinon from 'sinon';
+
 import { OpenCageLocationProvider } from '../../app/lib/coordinates/providers/opencage-provider';
 
 describe('lib/coordinates/providers/opencage-provider', () => {
-  const client = new geocoder({})
+  const client = new geocoder({});
   const provider = new OpenCageLocationProvider({ client, enabled: true });
 
   const response = {
     ok: true,
     results: [
       {
-        geometry: { lat: 51.547133, lng: -0.005668  },
+        geometry: { lat: 51.547133, lng: -0.005668 },
         formatted: 'testing address1',
         components: {
           city: 'LONDON',
@@ -24,10 +25,9 @@ describe('lib/coordinates/providers/opencage-provider', () => {
 
   afterEach(() => sinon.restore());
 
-
   describe('getLocation', () => {
     it('should return resolved address location, when request is successful', async () => {
-      sinon.stub(client, 'geocode').resolves(response as any);
+      sinon.stub(client, 'geocode').resolves(response as Awaited<ReturnType<geocoder['geocode']>>);
 
       const result = await provider.getLocation('search address');
 
@@ -42,7 +42,7 @@ describe('lib/coordinates/providers/opencage-provider', () => {
     });
 
     it('should return null, when request is not successful', async () => {
-      sinon.stub(client, 'geocode').resolves({} as any);
+      sinon.stub(client, 'geocode').resolves({} as Awaited<ReturnType<geocoder['geocode']>>);
 
       const result = await provider.getLocation('search adress');
 
@@ -50,8 +50,8 @@ describe('lib/coordinates/providers/opencage-provider', () => {
     });
 
     it('should return resolved with missing data, when request is successful, but lacks information', async () => {
-      const noComponentsResponse = { ok: true, results: [{ ...response.results[0], components: [] }]} ;
-      sinon.stub(client, 'geocode').resolves(noComponentsResponse as any);
+      const noComponentsResponse = { ok: true, results: [{ ...response.results[0], components: [] }] };
+      sinon.stub(client, 'geocode').resolves(noComponentsResponse as Awaited<ReturnType<geocoder['geocode']>>);
 
       const result = await provider.getLocation('search address');
 
