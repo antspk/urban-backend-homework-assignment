@@ -4,9 +4,9 @@
   "description": "",
   "main": "app/index.js",
   "scripts": {
-    "test": "mocha 'tests/**/*.spec.js' --exit",
-    "build": "tsc",
-    "prebuild": "del 'app/**/*.{js,map}' 'tests/**/*.{js,map}'"
+    "test": "mocha",
+    "test:cov": "nyc mocha",
+    "build": "del dist && tsc"
   },
   "keywords": [],
   "author": "",
