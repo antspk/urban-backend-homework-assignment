@@ -41,6 +41,48 @@ const geojson: GeoJSON[] = [
       ],
     },
   },
+  {
+    type: 'Feature',
+    properties: {
+      Name: 'LONDONCENTRAL',
+    },
+    geometry: {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [-0.10884404182434082, 51.50659222851966],
+          [-0.10638713836669922, 51.50659222851966],
+          [-0.10638713836669922, 51.507273368348315],
+          [-0.10884404182434082, 51.507273368348315],
+          [-0.10884404182434082, 51.50659222851966],
+        ],
+      ],
+    },
+  },
+  {
+    type: 'Feature',
+    properties: {
+      Name: 'LONDONCENTRAL',
+    },
+    geometry: {
+      type: 'GeometryCollection',
+      geometries: [
+        {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [-0.10884404182434082, 50.50659222851966],
+              [-0.10638713836669922, 50.50659222851966],
+              [-0.10638713836669922, 50.507273368348315],
+              [-0.10884404182434082, 50.507273368348315],
+              [-0.10884404182434082, 50.50659222851966],
+            ],
+          ],
+        }
+      ]
+    },
+  },
+  
 ];
 
 describe('lib/service-areas', () => {
@@ -59,6 +101,14 @@ describe('lib/service-areas', () => {
       sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
 
       const serviceAreaName = findServiceArea(51.535534, -0.029012);
+
+      expect(serviceAreaName).to.be.null;
+    });
+
+    it('should return a service area name, when service area exists in geometry collection', () => {
+      sinon.stub(orm, 'getGeoJson').returns({ features: geojson } as any);
+
+      const serviceAreaName = findServiceArea(50.535534, -0.029012);
 
       expect(serviceAreaName).to.be.null;
     });

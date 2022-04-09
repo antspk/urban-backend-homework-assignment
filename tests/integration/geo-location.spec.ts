@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import * as request from 'supertest';
-import { app } from '../../app';
+import { app } from '../../app/app';
 import { OpenCageLocationProvider } from '../../app/lib/coordinates/providers/opencage-provider';
 import { GoogleMapsLocationProvider } from '../../app/lib/coordinates/providers/googlemaps-provider';
 import { IAddress } from '../../app/lib/models/address';
@@ -71,6 +71,20 @@ describe('controllers/geo-location', () => {
         body: {
           message: 'Address testingaddress is outside service area',
           status: 'ADDRESS_NOT_SERVICED',
+        }
+      });
+    });
+
+    it('should return internal server error, when unhandled error occurs', async () => {
+      sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').rejects(new Error());
+      
+      const response = await request(app).get('/geolocation?address=testingaddress');
+
+      expect(response).to.deep.include({
+        status: 500,
+        body: {
+          message: 'An unexpected error occurred',
+          status: 'INTERNAL_SERVER_ERROR',
         }
       });
     });

@@ -4,30 +4,26 @@ import {
   GeocodeResult,
   GeocodingAddressComponentType
 } from '@googlemaps/google-maps-services-js';
+import { Config } from '../../../config';
 import { IAddress, ToggleableLocationProvider } from '../../models/address';
 
-const GOOGLE_MAPS_KEY = process.env.GOOGLE_MAPS_KEY;
-
 export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
-  private googlemapsClient = new Client({});
+  
+  constructor(private options: { client: Client, enabled: boolean, apiKey: string }) {}
   
   async getLocation(address: string): Promise<IAddress> {
-    const googleAddress = await this.googlemapsClient.geocode({
+    const googleAddress = await this.options.client.geocode({
       params: {
         address,
-        key: GOOGLE_MAPS_KEY,
+        key: this.options.apiKey,
       },
     });
-
-    if (
-      (!googleAddress.data && !googleAddress?.data?.results) ||
-      googleAddress?.data?.results?.length === 0
-    ) {
+    
+    if (!(googleAddress.data?.results?.length)) {
       return null;
     }
 
-    const [result] = googleAddress.data.results;
-    return this.mapAddress(result);
+    return this.mapAddress(googleAddress.data.results[0]);
   }
   
   private mapAddress(googleAddress: GeocodeResult): IAddress {
@@ -44,6 +40,14 @@ export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
   }
 
   isEnabled(): boolean {
-    return process.env.GOOGLE_MAPS_ENABLED === 'true';
+    return this.options.enabled;
+  }
+  
+  static create(config: Config): GoogleMapsLocationProvider {
+    return new GoogleMapsLocationProvider({
+      apiKey: config.googleMapsProvider.apiKey,
+      enabled: config.openCageProvider.enabled,
+      client: new Client({})
+    });
   }
 }
