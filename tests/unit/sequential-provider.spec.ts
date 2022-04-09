@@ -1,16 +1,20 @@
 import { expect } from 'chai';
 import { SequentialProvider } from '../../app/lib/coordinates/providers/sequential-provider';
-import { IAddress, LocationProvider } from '../../app/lib/models/address';
+import { IAddress, ToggleableLocationProvider } from '../../app/lib/models/address';
 
 describe('lib/coordinates/providers/sequential-provider', () => {
-  class FakeProvider implements LocationProvider {
-    constructor(private delay: number, private address: IAddress | null) {
+  class FakeProvider implements ToggleableLocationProvider {
+    constructor(private delay: number, private enabled: boolean, private address: IAddress | null) {
     }
 
     async getLocation(address: string): Promise<IAddress | null> {
       return new Promise<IAddress | null>((resolve) => {
         setTimeout(() => resolve(this.address), this.delay);
       });
+    }
+
+    isEnabled(): boolean {
+      return this.enabled;
     }
   }
   
@@ -24,7 +28,10 @@ describe('lib/coordinates/providers/sequential-provider', () => {
   
   describe('SequentialProvider', () => {
     it('should return first location that is resolved', async () => {
-      const provider = new SequentialProvider([new FakeProvider(1, null), new FakeProvider(1, fakeAddress)]);
+      const provider = new SequentialProvider([
+        new FakeProvider(1, false, null), 
+        new FakeProvider(1, true, fakeAddress)
+      ]);
       
       const location = await provider.getLocation('searchaddress');
       
@@ -32,7 +39,10 @@ describe('lib/coordinates/providers/sequential-provider', () => {
     });
 
     it('should return null, when location can not be resolved', async () => {
-      const provider = new SequentialProvider([new FakeProvider(1, null), new FakeProvider(1, null)]);
+      const provider = new SequentialProvider([
+        new FakeProvider(1, true, null), 
+        new FakeProvider(1, true, null)
+      ]);
 
       const location = await provider.getLocation('searchaddress');
 

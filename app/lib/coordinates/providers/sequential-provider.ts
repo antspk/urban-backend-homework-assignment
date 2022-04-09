@@ -1,13 +1,15 @@
-import { IAddress, LocationProvider } from '../../models/address';
+import { IAddress, LocationProvider, ToggleableLocationProvider } from '../../models/address';
 
 export class SequentialProvider implements LocationProvider {
-  constructor(private providers: LocationProvider[]) {}
+  constructor(private providers: ToggleableLocationProvider[]) {}
   
   async getLocation(address: string): Promise<IAddress | null> {
     for await (const provider of this.providers) {
-      const location = await provider.getLocation(address);
-      if (location) {
-        return location;
+      if (provider.isEnabled()) {
+        const location = await provider.getLocation(address);
+        if (location) {
+          return location;
+        }  
       }
     }
     

@@ -1,9 +1,9 @@
-import { IAddress, LocationProvider } from '../../models/address';
+import { IAddress, ToggleableLocationProvider } from '../../models/address';
 import { geocoder, IGeoPoint } from 'geocoder-opencagedata';
 
 const OPEN_CAGE_KEY = process.env.OPEN_CAGE_KEY;
 
-export class OpenCageLocationProvider implements LocationProvider {
+export class OpenCageLocationProvider implements ToggleableLocationProvider {
   
   private openCageClient = new geocoder({ api_key: OPEN_CAGE_KEY });
   
@@ -21,6 +21,10 @@ export class OpenCageLocationProvider implements LocationProvider {
       lat: information.results[0].geometry.lat as number,
       lng: information.results[0].geometry.lng as number
     };
+  }
+
+  isEnabled(): boolean {
+    return process.env.OPEN_CAGE_ENABLED === 'true';
   }
 }
 

@@ -4,11 +4,11 @@ import {
   GeocodeResult,
   GeocodingAddressComponentType
 } from '@googlemaps/google-maps-services-js';
-import { IAddress, LocationProvider } from '../../models/address';
+import { IAddress, ToggleableLocationProvider } from '../../models/address';
 
 const GOOGLE_MAPS_KEY = process.env.GOOGLE_MAPS_KEY;
 
-export class GoogleMapsLocationProvider implements LocationProvider {
+export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
   private googlemapsClient = new Client({});
   
   async getLocation(address: string): Promise<IAddress> {
@@ -40,5 +40,9 @@ export class GoogleMapsLocationProvider implements LocationProvider {
       lat: geometry.location.lat,
       lng: geometry.location.lng,
     };
+  }
+
+  isEnabled(): boolean {
+    return process.env.GOOGLE_MAPS_ENABLED === 'true';
   }
 }
