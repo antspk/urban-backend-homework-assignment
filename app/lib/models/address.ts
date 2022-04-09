@@ -9,3 +9,7 @@ export interface IAddress {
 export interface IAddressWithServiceArea extends IAddress {
   serviceArea: string;
 }
+
+export interface LocationProvider {
+  getLocation(address: string): Promise<IAddress | null>
+}
