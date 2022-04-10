@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urban-cache-deployment
+  labels:
+    app: urban-cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: urban-cache
+  template:
+    metadata:
+      labels:
+        app: urban-cache
+    spec:
+      containers:
+        - name: urban-cache
+          image: redis:6.2-alpine
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: urban-cache-service
+spec:
+  selector:
+    app: urban-cache
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: urban-cache-configmap
+data:
+  host: urban-cache-service
+  port: '6379'
+  ttl: '600000'
