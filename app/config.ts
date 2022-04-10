@@ -4,7 +4,7 @@ export type Config = typeof config;
 
 export const config = {
   app: {
-    port: Number(process.env.PORT) || 9000,
+    port: Number(process.env.APP_PORT) || 9000,
     debug: process.env.APP_DEBUG === 'true',
   },
   cache: {

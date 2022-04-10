@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "test": "mocha",
+    "start": "node -r ts-node/register ./app/index",
     "test:cov": "nyc mocha",
     "build": "del dist && tsc"
   },
