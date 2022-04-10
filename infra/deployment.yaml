@@ -50,6 +50,21 @@ spec:
               configMapKeyRef:
                 name: urban-configmap
                 key: open-cage-order
+          - name: CACHE_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: port
+                name: urban-cache-configmap
+          - name: CACHE_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: host
+                name: urban-cache-configmap
+          - name: CACHE_TTL
+            valueFrom:
+              configMapKeyRef:
+                key: ttl
+                name: urban-cache-configmap
 ---
 apiVersion: v1
 kind: Service

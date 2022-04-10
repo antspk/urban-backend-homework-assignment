@@ -3,7 +3,7 @@ import { GeoJSON } from 'geojson';
 
 import { GeoJsonServiceAreaLookup } from '../../../app/infra/persistence/service-areas-lookup';
 
-describe('lib/services-areas', () => {
+describe('infra/persistence/service-area', () => {
   const geoJSON: GeoJSON = {
     type: 'FeatureCollection',
     features: [
