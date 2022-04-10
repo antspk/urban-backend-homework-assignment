@@ -6,7 +6,9 @@ import { app } from '../../../app/app';
 import { Address } from '../../../app/domain/models/address-lookup';
 import { GoogleMapsLocationProvider } from '../../../app/infra/clients/googlemaps-provider';
 import { OpenCageLocationProvider } from '../../../app/infra/clients/opencage-provider';
+import { RedisCache } from '../../../app/infra/persistence/redis-cache';
 import { GeoJsonServiceAreaLookup } from '../../../app/infra/persistence/service-areas-lookup';
+import { FAKE_CACHE } from '../../infra/persistence/fake-cache';
 
 describe('api/controllers/geo-location', () => {
   const fakeAddress: Address = {
@@ -19,6 +21,10 @@ describe('api/controllers/geo-location', () => {
   };
 
   afterEach(async () => restore());
+
+  beforeEach(async () => {
+    stub(RedisCache.prototype, 'wrap').callsFake(FAKE_CACHE.wrap);
+  });
 
   describe('/geolocation (GET)', () => {
     it('should return services area location, when address is within services area', async () => {

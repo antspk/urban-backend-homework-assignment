@@ -5,7 +5,7 @@ import { Address } from '../../domain/models/address-lookup';
 import { ToggleableLocationProvider } from '../../domain/models/location-provider';
 
 export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
-  constructor(private options: { client: Client; enabled: boolean; apiKey: string }) {}
+  constructor(private options: GoogleMapsLocationProviderOptions) {}
 
   async getLocation(address: string): Promise<Address | null> {
     const googleAddress = await this.options.client.geocode({
@@ -39,11 +39,23 @@ export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
     return this.options.enabled;
   }
 
+  isCacheable(): boolean {
+    return this.options.cache;
+  }
+
   static create(config: Config): GoogleMapsLocationProvider {
     return new GoogleMapsLocationProvider({
       apiKey: config.googleMapsProvider.apiKey,
       enabled: config.openCageProvider.enabled,
       client: new Client({}),
+      cache: config.googleMapsProvider.cache,
     });
   }
+}
+
+export interface GoogleMapsLocationProviderOptions {
+  readonly client: Client;
+  readonly enabled: boolean;
+  readonly apiKey: string;
+  readonly cache: boolean;
 }

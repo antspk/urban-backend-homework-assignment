@@ -7,7 +7,7 @@ import { GoogleMapsLocationProvider } from '../../../app/infra/clients/googlemap
 
 describe('infra/clients/googlemaps-provider', () => {
   const client = new Client({});
-  const provider = new GoogleMapsLocationProvider({ client, enabled: true, apiKey: '' });
+  const provider = new GoogleMapsLocationProvider({ client, enabled: true, apiKey: '', cache: false });
   const response = {
     data: {
       results: [

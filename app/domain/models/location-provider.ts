@@ -6,4 +6,6 @@ export interface LocationProvider {
 
 export interface ToggleableLocationProvider extends LocationProvider {
   isEnabled(): boolean;
+
+  isCacheable(): boolean;
 }
