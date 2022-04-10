@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: urban-configmap
+data:
+  google-maps-enabled: 'true'
+  google-maps-order: '2'
+  open-cage-enabled: 'true'
+  open-cage-order: '1'

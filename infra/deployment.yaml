@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urban-api-deployment
+  labels:
+    app: urban-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: urban-api
+  template:
+    metadata:
+      labels:
+        app: urban-api
+    spec:
+      containers:
+        - name: urban-api
+          image: urban/api:1.0.0
+          ports:
+          - containerPort: 9000
+          env:
+          - name: OPEN_CAGE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: urban-secrect
+                key: opencage-api-key
+          - name: GOOGLE_MAPS_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: urban-configmap
+                key: google-maps-enabled
+          - name: GOOGLE_MAPS_ORDER
+            valueFrom:
+              configMapKeyRef:
+                name: urban-configmap
+                key: google-maps-order
+          - name: GOOGLE_MAPS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: urban-secrect
+                key: googlemaps-api-key
+          - name: OPEN_CAGE_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: urban-configmap
+                key: open-cage-enabled
+          - name: OPEN_CAGE_ORDER
+            valueFrom:
+              configMapKeyRef:
+                name: urban-configmap
+                key: open-cage-order
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: urban-api-service
+spec:
+  selector:
+    app: urban-api
+  type: LoadBalancer  
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+      nodePort: 30000
