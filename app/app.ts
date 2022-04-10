@@ -1,5 +1,5 @@
 import { json } from 'body-parser';
-import * as express from 'express';
+import { default as express } from 'express';
 import { default as pino } from 'pino-http';
 import { serve, setup } from 'swagger-ui-express';
 import { callbackify } from 'util';

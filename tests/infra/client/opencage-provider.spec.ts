@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { geocoder } from 'geocoder-opencagedata';
-import * as sinon from 'sinon';
+import { restore, stub } from 'sinon';
 
 import { OpenCageLocationProvider } from '../../../app/infra/clients/opencage-provider';
 
@@ -23,11 +23,11 @@ describe('infra/clients/opencage-provider', () => {
     ],
   };
 
-  afterEach(() => sinon.restore());
+  afterEach(() => restore());
 
   describe('getLocation', () => {
     it('should return resolved address location, when request is successful', async () => {
-      sinon.stub(client, 'geocode').resolves(response as Awaited<ReturnType<geocoder['geocode']>>);
+      stub(client, 'geocode').resolves(response as Awaited<ReturnType<geocoder['geocode']>>);
 
       const result = await provider.getLocation('search address');
 
@@ -42,7 +42,7 @@ describe('infra/clients/opencage-provider', () => {
     });
 
     it('should return null, when request is not successful', async () => {
-      sinon.stub(client, 'geocode').resolves({} as Awaited<ReturnType<geocoder['geocode']>>);
+      stub(client, 'geocode').resolves({} as Awaited<ReturnType<geocoder['geocode']>>);
 
       const result = await provider.getLocation('search adress');
 
@@ -51,7 +51,7 @@ describe('infra/clients/opencage-provider', () => {
 
     it('should return resolved with missing data, when request is successful, but lacks information', async () => {
       const noComponentsResponse = { ok: true, results: [{ ...response.results[0], components: [] }] };
-      sinon.stub(client, 'geocode').resolves(noComponentsResponse as Awaited<ReturnType<geocoder['geocode']>>);
+      stub(client, 'geocode').resolves(noComponentsResponse as Awaited<ReturnType<geocoder['geocode']>>);
 
       const result = await provider.getLocation('search address');
 

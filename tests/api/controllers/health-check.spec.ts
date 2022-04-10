@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import * as request from 'supertest';
+import { default as request } from 'supertest';
 
 import { app } from '../../../app/app';
 

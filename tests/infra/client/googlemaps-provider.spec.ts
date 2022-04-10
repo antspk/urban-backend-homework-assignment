@@ -1,7 +1,7 @@
 import { Client } from '@googlemaps/google-maps-services-js';
 import { GeocodeResponse } from '@googlemaps/google-maps-services-js/dist/geocode/geocode';
 import { expect } from 'chai';
-import * as sinon from 'sinon';
+import { restore, stub } from 'sinon';
 
 import { GoogleMapsLocationProvider } from '../../../app/infra/clients/googlemaps-provider';
 
@@ -24,11 +24,11 @@ describe('infra/clients/googlemaps-provider', () => {
     },
   };
 
-  afterEach(() => sinon.restore());
+  afterEach(() => restore());
 
   describe('getLocation', () => {
     it('should return resolved address location, when request is successful', async () => {
-      sinon.stub(client, 'geocode').resolves(response as unknown as GeocodeResponse);
+      stub(client, 'geocode').resolves(response as unknown as GeocodeResponse);
 
       const result = await provider.getLocation('search address');
 
@@ -43,7 +43,7 @@ describe('infra/clients/googlemaps-provider', () => {
     });
 
     it('should return null, when request is not successful', async () => {
-      sinon.stub(client, 'geocode').resolves({} as unknown as GeocodeResponse);
+      stub(client, 'geocode').resolves({} as unknown as GeocodeResponse);
 
       const result = await provider.getLocation('search adress');
 
@@ -52,7 +52,7 @@ describe('infra/clients/googlemaps-provider', () => {
 
     it('should return resolved with missing data, when request is successful, but lacks information', async () => {
       const noComponentsResponse = { data: { results: [{ ...response.data.results[0], address_components: [] }] } };
-      sinon.stub(client, 'geocode').resolves(noComponentsResponse as unknown as GeocodeResponse);
+      stub(client, 'geocode').resolves(noComponentsResponse as unknown as GeocodeResponse);
 
       const result = await provider.getLocation('search address');
 

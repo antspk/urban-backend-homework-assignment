@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import * as sinon from 'sinon';
-import * as request from 'supertest';
+import { restore, stub } from 'sinon';
+import { default as request } from 'supertest';
 
 import { app } from '../../../app/app';
 import { Address } from '../../../app/domain/models/address-lookup';
@@ -18,12 +18,12 @@ describe('api/controllers/geo-location', () => {
     postcode: 'EXAMPLE',
   };
 
-  afterEach(async () => sinon.restore());
+  afterEach(async () => restore());
 
   describe('/geolocation (GET)', () => {
     it('should return services area location, when address is within services area', async () => {
-      sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
-      sinon.stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
+      stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
+      stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
@@ -46,8 +46,8 @@ describe('api/controllers/geo-location', () => {
     });
 
     it('should return address not found error, when adress is not found', async () => {
-      sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(null);
-      sinon.stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
+      stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(null);
+      stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
@@ -61,9 +61,9 @@ describe('api/controllers/geo-location', () => {
     });
 
     it('should return address not serviced error, when address is outside services area', async () => {
-      sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
-      sinon.stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
-      sinon.stub(GeoJsonServiceAreaLookup.prototype, 'lookup').returns(null);
+      stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
+      stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
+      stub(GeoJsonServiceAreaLookup.prototype, 'lookup').returns(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
@@ -77,7 +77,7 @@ describe('api/controllers/geo-location', () => {
     });
 
     it('should return internal server error, when unhandled error occurs', async () => {
-      sinon.stub(OpenCageLocationProvider.prototype, 'getLocation').rejects(new Error());
+      stub(OpenCageLocationProvider.prototype, 'getLocation').rejects(new Error());
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
