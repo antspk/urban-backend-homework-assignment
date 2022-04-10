@@ -1,4 +1,4 @@
-import * as cache from 'cache-manager';
+import cache from 'cache-manager';
 import { expect } from 'chai';
 import { stub } from 'sinon';
 
