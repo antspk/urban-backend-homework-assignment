@@ -8,7 +8,7 @@ export class AddressLookupService implements AddressLookup {
   constructor(private locationProvider: LocationProvider, private serviceAreaLookup: ServiceAreaLookup) {}
 
   async lookup(address: string): Promise<AddressWithServiceArea> {
-    const location = await this.locationProvider.getLocation(address);
+    const location = await this.locationProvider.geocode(address);
 
     if (!location) {
       throw new AddressNotFoundError(address);

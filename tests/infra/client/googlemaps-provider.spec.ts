@@ -30,7 +30,7 @@ describe('infra/clients/googlemaps-provider', () => {
     it('should return resolved address location, when request is successful', async () => {
       stub(client, 'geocode').resolves(response as unknown as GeocodeResponse);
 
-      const result = await provider.getLocation('search address');
+      const result = await provider.geocode('search address');
 
       expect(result).to.deep.eq({
         address1: 'testing address1',
@@ -45,7 +45,7 @@ describe('infra/clients/googlemaps-provider', () => {
     it('should return null, when request is not successful', async () => {
       stub(client, 'geocode').resolves({} as unknown as GeocodeResponse);
 
-      const result = await provider.getLocation('search adress');
+      const result = await provider.geocode('search adress');
 
       expect(result).to.eq(null);
     });
@@ -54,7 +54,7 @@ describe('infra/clients/googlemaps-provider', () => {
       const noComponentsResponse = { data: { results: [{ ...response.data.results[0], address_components: [] }] } };
       stub(client, 'geocode').resolves(noComponentsResponse as unknown as GeocodeResponse);
 
-      const result = await provider.getLocation('search address');
+      const result = await provider.geocode('search address');
 
       expect(result).to.deep.eq({
         address1: undefined,

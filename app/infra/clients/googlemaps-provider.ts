@@ -1,13 +1,13 @@
 import { AddressType, Client, GeocodeResult, GeocodingAddressComponentType } from '@googlemaps/google-maps-services-js';
 
-import { Config } from '../../config';
 import { Address } from '../../domain/models/address-lookup';
 import { ToggleableLocationProvider } from '../../domain/models/location-provider';
+import { LocationProviderOptions } from './location-provider-options';
 
 export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
   constructor(private options: GoogleMapsLocationProviderOptions) {}
 
-  async getLocation(address: string): Promise<Address | null> {
+  async geocode(address: string): Promise<Address | null> {
     const googleAddress = await this.options.client.geocode({
       params: {
         address,
@@ -42,20 +42,8 @@ export class GoogleMapsLocationProvider implements ToggleableLocationProvider {
   isCacheable(): boolean {
     return this.options.cache;
   }
-
-  static create(config: Config): GoogleMapsLocationProvider {
-    return new GoogleMapsLocationProvider({
-      apiKey: config.googleMapsProvider.apiKey,
-      enabled: config.openCageProvider.enabled,
-      client: new Client({}),
-      cache: config.googleMapsProvider.cache,
-    });
-  }
 }
 
-export interface GoogleMapsLocationProviderOptions {
+export interface GoogleMapsLocationProviderOptions extends LocationProviderOptions {
   readonly client: Client;
-  readonly enabled: boolean;
-  readonly apiKey: string;
-  readonly cache: boolean;
 }

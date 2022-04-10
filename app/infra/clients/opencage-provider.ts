@@ -1,13 +1,13 @@
-import { Geocoder, geocoder } from 'geocoder-opencagedata';
+import { Geocoder } from 'geocoder-opencagedata';
 
-import { Config } from '../../config';
 import { Address } from '../../domain/models/address-lookup';
 import { ToggleableLocationProvider } from '../../domain/models/location-provider';
+import { LocationProviderOptions } from './location-provider-options';
 
 export class OpenCageLocationProvider implements ToggleableLocationProvider {
   constructor(private options: OpenCageLocationProviderOptions) {}
 
-  async getLocation(address: string): Promise<Address | null> {
+  async geocode(address: string): Promise<Address | null> {
     const response = await this.options.client.geocode({ q: address });
 
     if (!response.ok || !response.results || response.results.length === 0) {
@@ -31,18 +31,8 @@ export class OpenCageLocationProvider implements ToggleableLocationProvider {
   isCacheable(): boolean {
     return this.options.cache;
   }
-
-  static factory(config: Config): OpenCageLocationProvider {
-    return new OpenCageLocationProvider({
-      client: new geocoder({ api_key: config.openCageProvider.apiKey }),
-      enabled: config.openCageProvider.enabled,
-      cache: config.openCageProvider.cache,
-    });
-  }
 }
 
-export interface OpenCageLocationProviderOptions {
+export interface OpenCageLocationProviderOptions extends Omit<LocationProviderOptions, 'apiKey'> {
   readonly client: Geocoder;
-  readonly enabled: boolean;
-  readonly cache: boolean;
 }

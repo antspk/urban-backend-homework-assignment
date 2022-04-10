@@ -28,8 +28,8 @@ describe('api/controllers/geo-location', () => {
 
   describe('/geolocation (GET)', () => {
     it('should return services area location, when address is within services area', async () => {
-      stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
-      stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
+      stub(OpenCageLocationProvider.prototype, 'geocode').resolves(fakeAddress);
+      stub(GoogleMapsLocationProvider.prototype, 'geocode').resolves(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
@@ -52,8 +52,8 @@ describe('api/controllers/geo-location', () => {
     });
 
     it('should return address not found error, when adress is not found', async () => {
-      stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(null);
-      stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
+      stub(OpenCageLocationProvider.prototype, 'geocode').resolves(null);
+      stub(GoogleMapsLocationProvider.prototype, 'geocode').resolves(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
@@ -67,8 +67,8 @@ describe('api/controllers/geo-location', () => {
     });
 
     it('should return address not serviced error, when address is outside services area', async () => {
-      stub(OpenCageLocationProvider.prototype, 'getLocation').resolves(fakeAddress);
-      stub(GoogleMapsLocationProvider.prototype, 'getLocation').resolves(null);
+      stub(OpenCageLocationProvider.prototype, 'geocode').resolves(fakeAddress);
+      stub(GoogleMapsLocationProvider.prototype, 'geocode').resolves(null);
       stub(GeoJsonServiceAreaLookup.prototype, 'lookup').returns(null);
 
       const response = await request(app).get('/geolocation?address=testingaddress');
@@ -83,7 +83,7 @@ describe('api/controllers/geo-location', () => {
     });
 
     it('should return internal server error, when unhandled error occurs', async () => {
-      stub(OpenCageLocationProvider.prototype, 'getLocation').rejects(new Error());
+      stub(OpenCageLocationProvider.prototype, 'geocode').rejects(new Error());
 
       const response = await request(app).get('/geolocation?address=testingaddress');
 
